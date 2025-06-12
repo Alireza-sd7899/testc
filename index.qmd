@@ -2,7 +2,7 @@
 title: "Data science project"
 author: "Alireza Sadeghi"
 format:  
-  revealjs:
+   revealjs:
      slide-number: true
      toc: false
      theme: simple
@@ -38,7 +38,7 @@ project:
 
 ## Original graph
 
-![](docs/clipboard-3364899231.png)
+![](images/clipboard-3364899231.png)
 
 ## Replicated graph
 
