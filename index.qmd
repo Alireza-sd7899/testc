@@ -38,7 +38,7 @@ project:
 
 ## Original graph
 
-![](images/clipboard-3364899231.png)
+![](docs/clipboard-3364899231.png)
 
 ## Replicated graph
 
