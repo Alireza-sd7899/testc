@@ -8,6 +8,8 @@ format:
      theme: simple
 bibliography: references.bib
 editor: visual
+project:
+  output-dir: docs
 ---
 
 ## Introduction
