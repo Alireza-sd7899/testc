@@ -1,0 +1,380 @@
+---
+title: "Project"
+author: "Alireza Sadeghi,Abishek Verma, Nimara Umer"
+format: revealjs
+ 
+
+
+editor: visual
+---
+
+------------------------------------------------------------------------
+
+## University: " Hochschule Fresenius
+
+### studiengang: International Business Management
+
+place: " Cologne Campus "
+
+title: "Strategic Thinking Skills and Labor Income
+
+------------------------------------------------------------------------
+
+### Paper type: Master report project
+
+author: - Alireza Sadeghi ,Abishek Verma, Nimara Umer
+
+Examiner1: Prof. Huber
+
+duedate: 21st July 2025
+
+------------------------------------------------------------------------
+
+# Introdction {.unnumbered}
+
+This project investigates how strategic thinking,specifically, Higher-Order Rationality (HOR) and Backward Induction (BI)—influences economic decision-making at both individual and household levels. Using large-scale data from the Singapore Life Panel and Korean Labor and Income Panel Study, the study demonstrates that strategic skills strongly correlate with income levels, household coordination, and gendered patterns in labor participation. The report aims to bridge behavioral game theory and labor economics, offering insights for educators, employers, and policymakers.
+
+## Introduction
+
+It introduces practical implications for hiring, education, and economic policy while highlighting the nuanced gendered outcomes embedded in the labor market structure.
+
+\newpage
+\thispagestyle{empty}
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpag
+
+# Introduction
+
+Strategic thinking is a core cognitive ability that enables individuals to anticipate and respond to the behavior of others. It encompasses planning, forecasting, and interpreting the mental models of peers, competitors, and partners. This competence is crucial not only in leadership and negotiation but also in everyday household decision-making. In this study, we explore the relevance of strategic thinking in shaping economic outcomes through two specific game-theoretic measures—HOR and BI—tested across diverse populations.
+
+# Methodology
+
+## Fig9:
+
+Data Preparation: A dataset was manually created in R containing the R-squared values from multiple regression models applied to a female subsample. The dataset included a categorical variable model that described each nested model specification, ranging from socio-demographics alone to the addition of educational, cognitive, and behavioral traits. The numeric variable r_squared held the corresponding R-squared values for each model.
+
+------------------------------------------------------------------------
+
+Visualization: To visualize the incremental changes in R-squared across models, a bar plot was generated using the ggplot2 package. Each bar represented the R-squared value for one of the six nested models, with bars colored in a uniform gray tone for simplicity. Numeric R-squared values were displayed above each bar for clarity. The x-axis labels (model names) were rotated at a 30-degree angle to enhance readability. The plot featured a minimalist theme with a centered title and no x-axis label to focus attention on the model names and R-squared values.
+
+------------------------------------------------------------------------
+
+Export: The plot could be saved as a PNG image using the ggsave function for inclusion in reports or presentations.
+
+### Figure 8
+
+```{r}
+# ============================
+# R: Recreate Stata Bar Graph for R-squared Changes (Females)
+# ============================
+
+# Step 1: Load required library
+library(ggplot2)
+
+# Step 2: Create the data frame
+r2_data <- data.frame(
+  model = factor(c(
+    "Socio-Demographics (A)",
+    "A & Educ, IST, and Eyes Test (B)",
+    "A, B & Non-cognitive Traits (C)",
+    "A, B, C & BI",
+    "A, B, C & HOR",
+    "A, B, C, BI & HOR"
+  ), levels = c(
+    "Socio-Demographics (A)",
+    "A & Educ, IST, and Eyes Test (B)",
+    "A, B & Non-cognitive Traits (C)",
+    "A, B, C & BI",
+    "A, B, C & HOR",
+    "A, B, C, BI & HOR"
+  )),
+  r_squared = c(
+    0.051516,
+    0.085,
+    0.096,
+    0.103,
+    0.097,
+    0.103  
+  )
+)
+
+# Step 3: Create the bar plot
+ggplot(r2_data, aes(x = model, y = r_squared)) +
+  geom_col(fill = "gray40") +
+  geom_text(aes(label = sprintf("%.3f", r_squared)),
+            vjust = -0.5, size = 4) +
+  labs(
+    title = "Changes in R-squared for Females",
+    x = NULL,
+    y = "R-squared"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+
+# Step 4: (Optional) Save the plot
+# ggsave("r_squared_females.png", width = 6, height = 4)
+
+
+```
+
+## Figure 9
+
+```{r}
+
+library(ggplot2)
+library(dplyr)
+
+# Create the data frame
+df <- data.frame(
+  gender = c(rep("male", 12), rep("female", 12)),
+  measure = c(
+    rep("BI score", 3),
+    rep("HOR score", 3),
+    rep("Eyes Test score", 3),
+    rep("IST Score", 3),
+    rep("BI score", 3),
+    rep("HOR score", 3),
+    rep("Eyes Test score", 3),
+    rep("IST Score", 3)
+  ),
+  level = c("0", "1", "2+",
+            "Bottom 1/3", "Middle 1/3", "Top 1/3",
+            "Bottom 1/3", "Middle 1/3", "Top 1/3",
+            "Bottom 1/3", "Middle 1/3", "Top 1/3",
+            "0", "1", "2+",
+            "Bottom 1/3", "Middle 1/3", "Top 1/3",
+            "Bottom 1/3", "Middle 1/3", "Top 1/3",
+            "Bottom 1/3", "Middle 1/3", "Top 1/3"),
+  lb = c(44931.305, 54109.086, 55480.535, 45216.531, 48002.105, 58814.445,
+         50066.574, 52866.023, 49313.242, 35703.82, 56006.551, 61009.414,
+         34252.043, 30851.008, 33478.758, 28860.623, 33940.754, 35268.48,
+         32507.17, 33701.172, 32089.473, 20753.66, 34339.328, 42162.641),
+  mean = c(51984.762, 62801.484, 66067.82, 51927.395, 57356.164, 67887.992,
+           58345.277, 61292.324, 58373.047, 43203.984, 64502.379, 70366.406,
+           40164.016, 36671.625, 41351.98, 35161.988, 39879.863, 42191.738,
+           38914.367, 39844.25, 38714.75, 24604.195, 39638.992, 50220.734),
+  ub = c(59038.219, 71493.883, 76655.109, 58638.258, 66710.219, 76961.531,
+         66623.984, 69718.625, 67432.852, 50704.148, 72998.211, 79723.398,
+         46075.984, 42492.238, 49225.203, 41463.355, 45818.973, 49114.996,
+         45321.563, 45987.324, 45340.023, 28454.732, 44938.656, 58278.828)
+)
+
+# Factorize level for plotting
+df$level <- factor(df$level, levels = unique(df$level))
+
+# Subset data
+df1 <- df %>% filter(measure %in% c("BI score", "HOR score"))
+df2 <- df %>% filter(measure %in% c("Eyes Test score", "IST Score"))
+
+# Plot 1
+p1 <- ggplot(df1, aes(x = level, y = mean, fill = gender)) +
+  geom_col(position = position_dodge(width = 0.9)) +
+  geom_errorbar(aes(ymin = lb, ymax = ub), width = 0.2,
+                position = position_dodge(width = 0.9)) +
+  facet_wrap(~ measure, scales = "free_x") +
+  theme_minimal() +
+  labs(title = "Part 1: BI & HOR Scores by Gender and Level",
+       x = "Level", y = "Mean Score") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+# Display plots
+p1
+
+
+```
+
+------------------------------------------------------------------------
+
+```{r}
+# Plot 2
+p2 <- ggplot(df2, aes(x = level, y = mean, fill = gender)) +
+  geom_col(position = position_dodge(width = 0.9)) +
+  geom_errorbar(aes(ymin = lb, ymax = ub), width = 0.2,
+                position = position_dodge(width = 0.9)) +
+  facet_wrap(~ measure, scales = "free_x") +
+  theme_minimal() +
+  labs(title = "Part 2: Eyes Test & IST Scores by Gender and Level",
+       x = "Level", y = "Mean Score") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p2
+
+```
+
+### **4. Challenges Encountered**
+
+Although the dataset was relatively clean and the goal was clearly defined, several challenges emerged throughout the project , ranging from technical hurdles in R to workflow and GitHub integration. These challenges not only tested my coding skills but also taught valuable lessons in debugging, planning, and patience.
+
+----
+
+#### **4.1. Data Formatting and Consistency**
+
+The dataset appeared simple at first glance, but a few subtle issues created complications:
+
+**Improper Data Types**: The `level` and `measure` columns were initially read as character vectors, which caused unwanted reordering in the plots. This required converting them to factors and manually setting their levels to control the display order.
+
+----
+
+**Floating-Point Precision**: Some of the mean, lower bound, and upper bound values were truncated or stored as strings, requiring type conversion using `as.numeric()` in some cases.
+
+**Non-Uniform Labels**: Inconsistencies such as “Top 1/3” vs “Top ⅓” across datasets (from earlier testing) caused grouping failures in plots until standardized.
+
+---
+
+#### **4.2. Visualization Logic and Syntax Errors**
+
+Plotting with `ggplot2` offers flexibility, but it also requires attention to syntax and structure:
+
+**Bar and Error Bar Misalignment**: The initial charts had misaligned error bars because `position_dodge()` wasn’t applied consistently in both `geom_col()` and `geom_errorbar()`. Fixing this required trial-and-error.
+
+---
+
+**Facet Ordering**: Without reordering the `measure` variable, the plot panels appeared alphabetically, which separated "Eyes Test score" from "IST Score" — reducing interpretability. Reordering with `factor(levels = ...)` was necessary to correct this.
+
+**Overcrowded Facets**: Initially, I tried displaying all genders and measures in one figure. This made the charts dense and hard to read, especially when labels overlapped. Ultimately, I separated the plots by gender, which made them cleaner and easier to interpret.
+
+---
+
+#### **4.3. GitHub and Version Control Issues**
+
+Using GitHub helped track changes, but it introduced several obstacles:
+
+**Authentication Problems**: GitHub’s newer token-based authentication system caused initial push failures. I had to create a Personal Access Token and store it securely using RStudio's Git configuration.
+
+**Pushing Unwanted Files**: `.Rproj.user`, `.Rhistory`, and the CSV input file were unintentionally committed to the repository. Creating a `.gitignore` file fixed this, but only after clutter had been added to the Git history.
+
+---
+
+**File Path Confusion**: When running the script on another computer, the file path to the CSV broke. This was resolved by using relative paths (`read_csv("data/Fig_A8_input.csv")`) and organizing files into a clean directory structure.
+
+#### **4.4. RStudio IDE Limitations**
+
+As a beginner, RStudio itself presented a few unexpected hurdles:
+
+**Console Errors Without Explanation**: Some errors (e.g., “object not found”) were cryptic, especially when variables were filtered out or overwritten accidentally. I learned to use `str()` and `summary()` frequently to debug data issues.
+
+---
+
+**Slow Rendering**: When attempting to include multiple plots in one output (e.g., `gridExtra` or `patchwork`), the rendering was noticeably slower, especially with many facets and high-resolution settings.
+
+**Session Restarts**: On a few occasions, RStudio crashed while plotting or rendering — requiring me to restart the session and reload all packages.
+
+#### **4.5. Workflow Management and Planning**
+
+Some of the most impactful challenges weren’t technical but rather organizational:
+
+**Too Much in One Script**: My early code was written as one long block. This made debugging difficult. I later modularized the code into chunks (e.g., one block for loading data, one for male plots, one for female).
+
+---
+
+**Lack of Inline Comments**: Forgetting to comment code while writing meant I had to re-learn what I’d done when revisiting older parts of the script. Adding descriptive comments improved readability.
+
+**Late GitHub Setup**: I didn't use GitHub from the start. This meant I lost the ability to track early development steps, including mistakes and how I fixed them.
+
+#### **4.6. Presentation Formatting**
+
+Formatting the plots for inclusion in a report or presentation came with its own set of problems:
+
+**Saving High-Quality Images**: Using `ggsave()` required tuning the width, height, and DPI settings to avoid blurry or cropped charts.
+
+----
+
+**Plot Titles and Labels**: Getting axis labels and legends to render consistently across all plots took several adjustments.
+
+**Color Palette Conflicts**: With multiple measures and both genders represented, some default color palettes created visual confusion. I eventually chose a consistent color scheme using `scale_fill_brewer()` for better contrast.
+
+----
+
+#### **4.7. Confidence Interval Interpretation**
+
+While plotting the error bars, I initially assumed that the intervals were symmetric. On closer inspection, I noticed some asymmetry (i.e., the distance from the mean to the lower bound was not equal to the upper bound). This required checking calculations to ensure the bars reflected the actual bounds and not some derived standard error approximation.
+
+---
+
+These challenges, though sometimes frustrating, were ultimately valuable learning experiences. They taught me how to troubleshoot code, document processes, manage a workflow more effectively, and think critically about how visualizations communicate meaning.
+
+### **5. Reflections: What I Would Do Differently**
+
+If given the opportunity to start this project again, I would make several improvements:
+
+---
+
+**Start with an R Project**: Using an `.Rproj` file helps manage the environment and keeps files better organized.
+
+**Automate the Pipeline**: I would modularize the script into functions, especially for repeated steps like filtering data and creating plots. This would improve scalability and reusability.
+
+**Use GitHub from the Beginning**: Early Git tracking would have preserved the coding process more transparently.
+
+**Explore Interactive Visuals**: Incorporating `plotly` or building a Shiny app could allow dynamic gender switching, filter controls, and a more interactive data exploration experience.
+
+---
+
+**Use Quarto**: For future reports, Quarto would offer a better framework for literate
+
+programming and reproducibility.
+
+---
+
+### **5. What I Could Not Solve**
+
+Although I was able to complete the main goals of the project — namely, visualizing the gender-based differences in cognitive scores using R and producing clear plots with confidence intervals — there were a few things I was not able to solve, either due to time limitations, technical hurdles, or lack of experience.
+
+---
+
+One of the first limitations I faced was the inability to combine male and female plots into one integrated view that felt clean and interpretable. I attempted to use facet grids that split the data by both gender and measure, but the result was too visually busy and hard to read, especially with long factor names like "Top 1/3" or "Bottom 1/3" running across the x-axis. I had hoped to build a combined chart that allowed for side-by-side gender comparison within each cognitive test, but I didn’t manage to do that in a way that was both aesthetically pleasing and functional. Eventually, I settled on creating two separate plots , one for males and one for females ,which was a good compromise, but not exactly what I originally intended.
+
+---
+
+Another area I struggled with was automating the export of my plots. Although I managed to save the final graphs manually using `ggsave()`, I wanted to create a loop or script that would generate and save all plots automatically into named folders, such as “male_figures” and “female_figures”. This would have made the process more scalable and professional. I attempted to do this using simple for-loops and `paste0()` functions to generate file names, but I ran into several issues with overwriting plots, inconsistent sizing, and relative paths. Because of these issues and the time pressure I was under, I stuck with manually exporting each image one by one, which was time-consuming but guaranteed accuracy.
+
+---
+
+There were also some problems related to GitHub that I couldn’t fully solve. While I was able to push the main files and code to a GitHub repository, I didn’t succeed in keeping the project completely clean or well-organized. At the start, I accidentally committed unnecessary files like `.Rhistory`, `.Rproj.user`, and even the CSV dataset itself. I tried using `.gitignore` to filter these out, and although that helped, some of these files still ended up in my repo history. I also wanted to create a proper README file with instructions and a summary of the project, but I ran out of time and had to skip that step. I know GitHub can be used to make projects more reproducible and collaborative, but in my case, it was more of a last-minute backup system than a fully developed workflow.
+
+---
+
+Another thing I wanted to include in my graphs was annotation — specifically, to label each bar with its mean score and possibly even show the confidence interval as text. I tried using `geom_text()` for this purpose, but the placement of the labels was tricky. They overlapped with the bars, sometimes extended outside the facet boundaries, or just made the plot look too crowded. I also ran into issues where the labels weren’t scaling correctly across different facets. Eventually, I decided not to include them at all, reasoning that the error bars themselves communicated enough information. Still, I think better labeling would have made the plots more informative.
+
+---
+
+Finally, I had initially hoped to render the entire project — code, plots, and write-up — as a single reproducible report using either R Markdown or Quarto. I did try setting up a `.qmd` file and writing the report in chunks, but I faced a number of rendering issues. Some code chunks failed during rendering because the variables they depended on were not available in the execution environment, even though they worked perfectly when run manually. Other times, the plot output would not fit within the page, or the formatting would break. These errors took too long to troubleshoot, and since I had already written my draft report in Word, I chose to finish that instead. I still think Quarto is a great tool for reproducibility, but I wasn’t ready to use it efficiently for this project.
+
+---
+
+All of these unsolved problems were frustrating at the time, but I see them now as part of the learning curve. They’ve helped me understand not just what I need to improve technically, but also what I might approach differently in future projects. While I was able to achieve my core goals, there’s a lot of room to improve when it comes to automation, visual polish, and professional workflow setup.
+
+---
+
+### **6. Conclusion**
+
+This project successfully replicated gender-disaggregated cognitive score visualizations using R. The final charts provide a clear picture of gender-based differences in various psychometric tests. The process reinforced key R programming skills, especially in data visualization, factor handling, and project reproducibility. In addition to technical growth, the experience highlighted the importance of workflow management, documentation, and clean version control practices. Despite minor challenges, the replication was completed accurately and in line with best practices.
+
+---
+
+### **7. References**
+
+Choi, S., Kim, S., & Lim, W. (2025). Strategic thinking skills: A key to collective economic success. *American Economic Journal: Microeconomics*, *17*(2), 214–240. <https://doi.org/10.1257/mic.20220259>
+
+  Wickham, H. (2016). *ggplot2: Elegant Graphics for Data Analysis*. Springer-Verlag New York.
+
+Wickham, H. et al. (2019). *Welcome to the tidyverse*. Journal of Open Source Software, 4(43), 1686.
+
+R Core Team. (2024). *R: A Language and Environment for Statistical Computing*. R Foundation.
+
+GitHub Docs. (n.d.). *Managing Personal Access Tokens*. <https://docs.github.com>
+
+Posit Software. (2024). *Using R Projects*. <https://posit.co>
+
+---
+
+### **8. Declaration of Originality**
+
+I affirm that this report was authored solely by me. All analysis, code, and visualizations were conducted independently using RStudio. Any external sources are fully cited. No portion of this report has been submitted elsewhere, and I agree to cooperate with any academic integrity investigations related to this project.
